@@ -1,18 +1,28 @@
-# 📊 Análise de Vendas com SQL
+# 📊 Análise de Vendas — SQL · Python · Power BI
 
-Projeto de análise de dados utilizando SQL para responder perguntas reais de negócio sobre o desempenho de vendas de uma loja de tecnologia.
+Projeto completo de análise de dados construído do zero — desde a modelagem do banco de dados até o dashboard visual.
 
----
-
-## 🎯 Objetivo
-
-Explorar um banco de dados de vendas e extrair insights estratégicos usando consultas SQL, desde agregações básicas até subqueries avançadas.
+![Dashboard](dashboard.png)
 
 ---
 
-## 🗃️ Estrutura do Banco de Dados
+## 🗂️ Estrutura do projeto
 
-O banco é composto por 3 tabelas relacionadas:
+```
+analise-vendas-sql/
+├── dados/
+│   └── vendas_completas.csv
+├── analise_vendas.py
+├── análise_vendas.pbix
+├── dashboard.png
+└── README.md
+```
+
+---
+
+## 🗃️ Banco de Dados
+
+3 tabelas relacionadas:
 
 ```
 clientes (id_cliente, nome, cidade, estado)
@@ -24,7 +34,7 @@ vendas   (id_venda, id_cliente, id_produto, quantidade, data_venda)
 
 ---
 
-## 🔍 Análises Realizadas
+## 🔍 Análises em SQL
 
 ### 1. Receita total por produto
 > Qual produto gerou mais receita no ano?
@@ -63,7 +73,7 @@ ORDER BY data_venda;
 ### 3. Ticket médio por categoria
 > Qual categoria tem maior valor médio por venda?
 
-**Resultado:** Eletrônicos lideram com ticket médio de R$ 2.540 e 15 vendas — categoria mais lucrativa. Periféricos têm alto volume (13 vendas) mas ticket baixo (R$ 476).
+**Resultado:** Eletrônicos lideram com ticket médio de R$ 2.540 e 15 vendas. Periféricos têm alto volume (13 vendas) mas ticket baixo (R$ 476).
 
 ```sql
 SELECT
@@ -81,7 +91,7 @@ ORDER BY ticket_medio DESC;
 ### 4. Top 5 clientes por valor gasto
 > Quais clientes mais contribuíram para a receita?
 
-**Resultado:** Mariana Lima (Curitiba) lidera com R$ 8.700 em 4 compras. Pedro Alves tem o maior ticket médio por visita — candidatos a programa de fidelidade.
+**Resultado:** Mariana Lima (Curitiba) lidera com R$ 8.700 em 4 compras. Pedro Alves tem o maior ticket médio por visita.
 
 ```sql
 SELECT
@@ -102,7 +112,7 @@ LIMIT 5;
 ### 5. Produtos acima da média de receita (Subquery)
 > Quais produtos performam acima da média geral?
 
-**Resultado:** Apenas Notebook e Smartphone superam a média de R$ 5.115 — alta concentração de receita em 2 de 10 produtos, o que representa um risco estratégico para a loja.
+**Resultado:** Apenas Notebook e Smartphone superam a média de R$ 5.115 — alta concentração de receita em 2 de 10 produtos.
 
 ```sql
 SELECT
@@ -125,6 +135,38 @@ ORDER BY receita_total DESC;
 
 ---
 
+## 🐍 Análise em Python
+
+Usando **Pandas** para replicar e expandir as análises do SQL:
+
+```python
+import pandas as pd
+
+# Cruzando tabelas (equivalente ao JOIN)
+vendas_completas = vendas.merge(produtos, on='id_produto')
+
+# Calculando receita
+vendas_completas['receita'] = vendas_completas['quantidade'] * vendas_completas['preco']
+
+# Receita por categoria (equivalente ao GROUP BY)
+receita_categoria = vendas_completas.groupby('categoria')['receita'].sum()
+
+# Exportando para CSV
+vendas_completas.to_csv('dados/vendas_completas.csv', index=False)
+```
+
+---
+
+## 📊 Dashboard — Power BI
+
+3 visualizações construídas a partir dos dados gerados em Python:
+
+- **Receita por categoria** — gráfico de barras
+- **Receita por produto** — gráfico de barras
+- **Evolução mensal da receita** — gráfico de linhas
+
+---
+
 ## 💡 Principais Insights
 
 - 📦 **Notebook e Smartphone** respondem pela maior parte da receita — diversificação é necessária
@@ -137,19 +179,19 @@ ORDER BY receita_total DESC;
 ## 🛠️ Tecnologias utilizadas
 
 - **SQL** (SQLite)
-- **SQLiteOnline** — para execução das queries
+- **Python** (Pandas)
+- **Power BI Desktop**
 
 ---
 
 ## 📚 Conceitos aplicados
 
-`SELECT` · `FROM` · `JOIN` · `GROUP BY` · `ORDER BY` · `HAVING` · `LIMIT`  
-`SUM` · `COUNT` · `AVG` · `ROUND` · `strftime` · **Subqueries**
+`SELECT` · `JOIN` · `GROUP BY` · `HAVING` · `Subqueries` · `SUM` · `AVG` · `COUNT`
+`DataFrame` · `merge` · `groupby` · `sort_values` · `filter`
 
 ---
 
 ## 👩‍💻 Autora
-Jamilly Oliveira
 
 **Jamilly Oliveira**  
 Analista de Dados em formação · Python · SQL · Power BI  
